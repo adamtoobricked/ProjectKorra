@@ -79,7 +79,7 @@ public class HelpCommand extends PKCommand {
 					strings.add(command.getProperUse());
 				}
 			}
-			
+
 			Collections.sort(strings);
 			Collections.reverse(strings);
 			strings.add(instances.get("help").getProperUse());
@@ -103,7 +103,7 @@ public class HelpCommand extends PKCommand {
 			for (final PKCommand command : instances.values()) {
 				strings.add(command.getProperUse());
 			}
-			
+
 			for (final String s : this.getPage(strings, ChatColor.GOLD + "Commands: <" + this.required + "> [" + this.optional + "]", Integer.valueOf(arg), true)) {
 				if (firstMessage) {
 					ChatUtil.sendBrandingMessage(sender, s);
@@ -123,15 +123,15 @@ public class HelpCommand extends PKCommand {
 			final ChatColor color = ability.getElement().getColor();
 			final boolean isAddonAbility = ability instanceof AddonAbility;
 			final boolean isPassiveAbility = ability instanceof PassiveAbility;
-			
-			
+
+
 			sender.sendMessage(color + (ChatColor.BOLD + ability.getName()) + ChatColor.WHITE + (isAddonAbility ? (isPassiveAbility ? " (Addon Passive)" : " (Addon)") : (isPassiveAbility ? " (Passive)" : "")));
 			sender.sendMessage(color + ability.getDescription());
-			
+
 			if (!ability.getInstructions().isEmpty()) {
 				sender.sendMessage(ChatColor.WHITE + this.usage + ability.getInstructions());
 			}
-			
+
 			if (!isPassiveAbility && sender instanceof Player && this.enableQuickBind && BendingPlayer.getBendingPlayer((Player)sender).canBind(CoreAbility.getAbility(arg))) {
 				final ComponentBuilder bindShortcut = new ComponentBuilder();
 				bindShortcut.appendLegacy(ChatUtil.color(this.bindStart));
@@ -142,7 +142,7 @@ public class HelpCommand extends PKCommand {
 						bindShortcut.appendLegacy(ChatUtil.color(this.bindSeperator));
 						bindShortcut.append("", ComponentBuilder.FormatRetention.NONE);
 					}
-					
+
 					bindShortcut.appendLegacy(ChatUtil.color(this.slotFormat.replace("{slot}", String.valueOf(i)).replace("{element_color}", color.toString())));
 					bindShortcut.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder().appendLegacy( ChatColor.WHITE + this.hoverBind.replace("{ability}", color + ability.getName() + ChatColor.WHITE).replace("{slot}", color + String.valueOf(i) + ChatColor.WHITE)).create())));
 					bindShortcut.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/bending bind " + ability.getName() + " " + i));
@@ -152,7 +152,7 @@ public class HelpCommand extends PKCommand {
 				bindShortcut.appendLegacy(ChatUtil.color(this.bindEnd));
 				sender.spigot().sendMessage(bindShortcut.create());
 			}
-			
+
 			if (isAddonAbility) {
 				final AddonAbility addonAbility = (AddonAbility) ability;
 				sender.sendMessage(color + "- By: " + ChatColor.WHITE + addonAbility.getAuthor());

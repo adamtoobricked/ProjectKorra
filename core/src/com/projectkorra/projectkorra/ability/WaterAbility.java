@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.projectkorra.projectkorra.event.AbilityParticleEvent;
 import com.projectkorra.projectkorra.region.RegionProtection;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.Tag;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
@@ -370,6 +367,9 @@ public abstract class WaterAbility extends ElementalAbility {
 	 */
 
 	public static void playFocusWaterEffect(final Block block) {
+		AbilityParticleEvent event = new AbilityParticleEvent(WaterAbility.class, block.getLocation().add(0.5, 0.5, 0.5), 4, 0.0, 0.0, 0.0, 0.0F);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) return;
 		ParticleEffect.SMOKE_NORMAL.display(block.getLocation().add(0.5, 0.5, 0.5), 4);
 	}
 

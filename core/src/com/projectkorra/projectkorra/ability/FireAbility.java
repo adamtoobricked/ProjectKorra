@@ -6,15 +6,11 @@ import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ProjectKorra;
 import com.projectkorra.projectkorra.ability.util.Collision;
 import com.projectkorra.projectkorra.configuration.ConfigManager;
+import com.projectkorra.projectkorra.event.AbilityParticleEvent;
 import com.projectkorra.projectkorra.util.LightManager;
 import com.projectkorra.projectkorra.util.ParticleEffect;
 import com.projectkorra.projectkorra.util.TempBlock;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -254,6 +250,9 @@ public abstract class FireAbility extends ElementalAbility {
 	}
 
 	public void playFirebendingParticles(final Location loc, final int amount, final double xOffset, final double yOffset, final double zOffset) {
+		AbilityParticleEvent event = new AbilityParticleEvent(this, loc, amount, xOffset, yOffset, zOffset, 0.0F, this.bPlayer);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) return;
 		if (this.getBendingPlayer().canUseSubElement(SubElement.BLUE_FIRE)) {
 			ParticleEffect.SOUL_FIRE_FLAME.display(loc, amount, xOffset, yOffset, zOffset);
 		} else {
@@ -282,6 +281,9 @@ public abstract class FireAbility extends ElementalAbility {
 	}
 
 	public static void playLightningbendingParticle(final Location loc, final double xOffset, final double yOffset, final double zOffset) {
+		AbilityParticleEvent event = new AbilityParticleEvent(LightningAbility.class, loc, 1, xOffset, yOffset, zOffset, 0.0F);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) return;
 		GeneralMethods.displayColoredParticle("#01E1FF", loc, 1, xOffset, yOffset, zOffset);
 	}
 

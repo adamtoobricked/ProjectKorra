@@ -9,6 +9,7 @@ import com.projectkorra.projectkorra.ability.ElementalAbility;
 import com.projectkorra.projectkorra.ability.FireAbility;
 import com.projectkorra.projectkorra.command.Commands;
 import com.projectkorra.projectkorra.configuration.ConfigManager;
+import com.projectkorra.projectkorra.event.AbilityParticleEvent;
 import com.projectkorra.projectkorra.firebending.util.FireDamageTimer;
 import com.projectkorra.projectkorra.region.RegionProtection;
 import com.projectkorra.projectkorra.util.DamageHandler;
@@ -16,6 +17,7 @@ import com.projectkorra.projectkorra.util.LightManager;
 import com.projectkorra.projectkorra.util.ParticleEffect;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -104,8 +106,18 @@ public class FireComboStream extends BukkitRunnable {
 		}
 
 		for (int i = 0; i < this.density; i++) {
+			AbilityParticleEvent event = new AbilityParticleEvent(this, this.location, 1, (double)this.spread, (double)this.spread, (double)this.spread, 0.0F, this.bPlayer);
+			Bukkit.getPluginManager().callEvent(event);
+			if (event.isCancelled()) {
+				i = density;
+				continue;
+			}
 			if (this.useNewParticles) {
-				this.particleEffect.display(this.location, 1, this.spread, this.spread, this.spread);
+				if (this.particleEffect == null) {
+					((FireAbility)this.coreAbility).playFirebendingParticles(this.location, 1, (double)this.spread, (double)this.spread, (double)this.spread);
+				} else {
+					this.particleEffect.display(this.location, 1, (double)this.spread, (double)this.spread, (double)this.spread);
+				}
 			} else {
 				this.location.getWorld().playEffect(this.location, Effect.MOBSPAWNER_FLAMES, 0, 15);
 			}
@@ -121,14 +133,14 @@ public class FireComboStream extends BukkitRunnable {
 		}
 
 		this.location.add(this.direction.normalize().multiply(this.speed));
-		
+
 		try {
 			this.location.checkFinite();
 		} catch (IllegalArgumentException e) {
 			this.remove();
 			return;
 		}
-		
+
 		if (this.initialLocation.distanceSquared(this.location) > this.distance * this.distance || !Double.isFinite(this.collisionRadius)) {
 			this.remove();
 			return;

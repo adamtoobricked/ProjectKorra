@@ -89,6 +89,10 @@
       <id>phoenix</id>
       <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
     </repository>
+    <repository>
+      <id>phoenixone</id>
+      <url>https://repo.phoenix616.dev/</url>
+    </repository>
 
   </repositories>
 
@@ -272,20 +276,6 @@
           <publishingServerId>central</publishingServerId>
           <checksums>required</checksums>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>3.2.7</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

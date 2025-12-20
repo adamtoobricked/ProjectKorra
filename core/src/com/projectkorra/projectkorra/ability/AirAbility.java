@@ -3,6 +3,8 @@ package com.projectkorra.projectkorra.ability;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.projectkorra.projectkorra.event.AbilityParticleEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -125,6 +127,9 @@ public abstract class AirAbility extends ElementalAbility {
 	 * @param zOffset The zOffset to use
 	 */
 	public static void playAirbendingParticles(final Location loc, final int amount, final double xOffset, final double yOffset, final double zOffset) {
+		AbilityParticleEvent event = new AbilityParticleEvent(AirAbility.class, loc, amount, xOffset, yOffset, zOffset, 0.0F);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) return;
 		getAirbendingParticles().display(loc, amount, xOffset, yOffset, zOffset);
 	}
 
